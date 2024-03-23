@@ -22,7 +22,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
 
     @Override
     public Type getType() {
-        return Type.NONE;
+        return Type.HASHTABLE;
     }
 
     @SuppressWarnings("unchecked")
@@ -42,7 +42,7 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
     @Override
     public int size() {
         // TODO: Implement this.
-        return 0;
+        return count;
     }
 
     /**
@@ -74,25 +74,51 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
         // Remeber to check for null values.
 
         // Checks if the LOAD_FACTOR has been exceeded --> if so, reallocates to a bigger hashtable.
+        if(key == null || value == null){
+            throw new IllegalArgumentException ("Key and value cannot be null");
+        }
         if (((double)count * (1.0 + LOAD_FACTOR)) >= values.length) {
             reallocate((int)((double)(values.length) * (1.0 / LOAD_FACTOR)));
         }
+
+            int hashCode = key.hashCode();
+            int index = calculateIndex(hashCode,key);
+            if(index == -1){
+                return false;
+            }
+            if (values[index]==null){
+                count++;
+            }
+            values[index] = new Pair<>(key, value);
+    
+            return true;
+
+        
+    }
+    
+        
         // Remember to get the hash key from the Person,
         // hash table computes the index for the Person (based on the hash value),
         // if index was taken by different Person (collision), get new hash and index,
         // insert into table when the index has a null in it,
         // return true if existing Person updated or new Person inserted.
-        
-        return false;
-    }
+    
+    
 
     @Override
     public V find(K key) throws IllegalArgumentException {
         // Remember to check for null.
 
         // Must use same method for computing index as add method
-        
-        return null;
+        if (key == null) {  
+            throw new IllegalArgumentException("Key cannot be null");  
+        }  
+        int hashCode = key.hashCode();
+        int index = getHashIndex(hashCode,key);    
+        if (index == -1) {  
+            return null;  
+    }   
+    return values[index].getValue();
     }
 
     @Override
@@ -134,5 +160,33 @@ public class KeyValueHashTable<K extends Comparable<K>, V> implements Dictionary
 			      reallocate(newCapacity);
 		    } 
     }
- 
+
+    private int calculateIndex(int hashCode, K key) {  
+        int index = Math.abs(hashCode) % values.length;
+
+        int orginalindex = index;
+        while (values[index] != null && !values[index].getKey().equals(key)) {
+            index = (index + 1) % values.length;
+            if (index == orginalindex) {
+                return -1;
+            }
+        }
+        return index;
+    }
+        
+
+    private int getHashIndex(int hashCode,K key){
+        int index = Math.abs(hashCode) % values.length;
+
+        int orginalindex1 = index;
+        while (values[index] == null || !values[index].getKey().equals(key)) {
+            index = (index + 1) % values.length;
+            if (index == orginalindex1) {
+                return -1;
+            }
+        }
+        return index;
+    }
 }
+ 
+
