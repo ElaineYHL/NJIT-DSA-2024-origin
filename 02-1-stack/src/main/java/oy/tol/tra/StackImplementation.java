@@ -83,6 +83,7 @@ public class StackImplementation<E> implements StackInterface<E> {
          throw new StackIsEmptyException("There is no data in the stack");
       }
       Object popElement = itemArray[currentIndex];
+      itemArray[currentIndex] = null;
       currentIndex--;
       return (E) popElement;
        
