@@ -1,5 +1,7 @@
 package oy.tol.tra;
 
+import java.util.EmptyStackException;
+
 /**
  * Uses the StackInterface implementation to check that parentheses in text files
  * match. 
@@ -61,5 +63,34 @@ public class ParenthesisChecker {
       //         throw an exception, wrong kind of parenthesis were in the text (e.g. "asfa ( asdf } sadf")
       // if the stack is not empty after all the characters have been handled
       //   throw an exception since the string has more opening than closing parentheses.
-   }
+      int count=0;
+      for (char c : fromString.toCharArray()) {   
+        if (c == '(' || c == '[' || c == '{') {  
+            try {  
+                stack.push(c);  
+            } catch (Exception e) {  
+                throw new ParenthesesException("Error pushing opening parenthesis to stack", ParenthesesException.STACK_FAILURE);  
+            }  
+            count++;
+        }   
+        else if (c == ')' || c == ']' || c == '}') { 
+                if (stack.isEmpty()) {  
+                    throw new ParenthesesException("Too many closing parentheses",ParenthesesException.TOO_MANY_CLOSING_PARENTHESES);  
+                }  
+                Character popped = stack.pop();
+                count++;
+                if ((c == ')' && popped != '(') ||  
+                    (c == ']' && popped != '[') ||  
+                    (c == '}' && popped != '{')) {  
+                    throw new ParenthesesException("Mismatching parentheses",ParenthesesException.PARENTHESES_IN_WRONG_ORDER);  
+                }  
+        }  
+    }  
+    if (!stack.isEmpty()) {  
+        throw new ParenthesesException("Too many opening parentheses",ParenthesesException.STACK_FAILURE);  
+    }  
+    return count;  
 }
+   }
+
+
