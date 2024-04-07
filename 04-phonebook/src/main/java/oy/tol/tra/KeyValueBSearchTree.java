@@ -51,25 +51,24 @@ public class KeyValueBSearchTree<K extends Comparable<K>, V> implements Dictiona
         // TODO: Implement this
         // Remember null check.
         // If root is null, should go there.
-        
-            // update the root node. But it may have children
+        if (null==key || value==null) throw new IllegalArgumentException("Person or phone number cannot be null");
+        if (root == null){
+            root = new TreeNode<>(key,value);
+            count++;
+            return true;
+        }
+        int added = root.insert(key,value,key.hashCode());
+        if (TreeNode.currentAddTreeDepth>maxTreeDepth){
+            maxTreeDepth = TreeNode.currentAddTreeDepth;
+        }
+        // update the root node. But it may have children
             // so do not just replace it with this new node but set
             // the keys and values for the already existing root.
-            if (null==key || value==null) throw new IllegalArgumentException("Person or phone number cannot be null");
-            if (root == null){
-                root = new TreeNode<>(key,value);
-                count++;
-                return true;
-            }
-            int added = root.insert(key,value,key.hashCode());
-            if (TreeNode.currentAddTreeDepth>maxTreeDepth){
-                maxTreeDepth = TreeNode.currentAddTreeDepth;
-            }
-            TreeNode.currentAddTreeDepth = 0;
-            if (added == 1){
-                count++;
-                return true;
-            }else return false;
+        TreeNode.currentAddTreeDepth = 0;
+        if (added == 1){
+            count++;
+            return true;
+        }else return false;
     }
 
     @Override

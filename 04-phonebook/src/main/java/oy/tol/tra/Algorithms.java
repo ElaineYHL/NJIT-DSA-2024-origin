@@ -3,17 +3,15 @@ import java.util.function.Predicate;
 
 public class Algorithms {
     public static <T extends Comparable<T>> void sort(T [] array) {
-        int i = array.length-1;
-        while (i > 0) {
-           for(int j = 0; j < i; j++)
-           if (array[j].compareTo(array[j+1]) > 0) {
-              T tmp = array[j];
-              array[j] = array[j+1];
-              array[j+1] = tmp;
-           }
-           i--;
+        for (int i=0;i<array.length-1;i++){
+            for (int j=0;j<array.length-1-i;j++){
+                if (array[j].compareTo(array[j+1]) > 0) {
+                    swap(array,j,j+1);
+                }
+
+            }
         }
-      }
+    }
   
        public static <T> void reverse(T [] array) {
           int i = 0;
@@ -32,14 +30,16 @@ public class Algorithms {
         quickSort(array,0,array.length-1);
     }
 
+    //The body part of quicksort, using recursion
     public static <E extends Comparable<E>> void quickSort(E [] array, int begin, int end){
         if (begin < end){
-            int i = partition(array,begin,end);
-            quickSort(array,begin,i-1);
-            quickSort(array,i+1,end);
+            int q = partition(array,begin,end);
+            quickSort(array,begin,q-1);
+            quickSort(array,q+1,end);
         }
     }
 
+    //The core part of quicksort
     private static <E extends Comparable<E>> int partition(E [] array, int begin, int end) {
         int i = begin-1;
         for (int leftIndex = begin;leftIndex<end;leftIndex++){
@@ -52,6 +52,7 @@ public class Algorithms {
         return i+1;
     }
 
+    //The generic method used to swap two elements of an array: swap
     public static <T> void swap(T[] array,int i,int j){
         T temp = array[i];
         array[i] = array[j];
@@ -63,20 +64,20 @@ public class Algorithms {
             return -1;
         }
 
-        int mid = (fromIndex+toIndex)/2;
+        int middle = (fromIndex+toIndex)/2;
 
-        if (aValue.compareTo(fromArray[mid]) == 0) {
-            return mid;
+        if (aValue.compareTo(fromArray[middle]) == 0) {
+            return middle;
         }
-        else if (aValue.compareTo(fromArray[mid]) < 0) {
-            return binarySearch(aValue, fromArray, fromIndex, mid - 1);
+        else if (aValue.compareTo(fromArray[middle]) < 0) {
+            return binarySearch(aValue, fromArray, fromIndex, middle - 1);
         }
         else {
-            return binarySearch(aValue, fromArray, mid + 1, toIndex);
+            return binarySearch(aValue, fromArray, middle + 1, toIndex);
         }
-    }
 
-    public static <T> int partitionByRule(T[] array, int count, Predicate<T> rule) {  
+    }
+    public static <T> int partitionByRule(T[] array, int count, Predicate<T> rule) {
         int index = 0;
         for (; index < count; index++) {
             if (rule.test(array[index])) {
@@ -86,6 +87,7 @@ public class Algorithms {
         if (index >= count) {
             return count;
         }
+       
         int nextIndex = index + 1;
         while (nextIndex != count) {
             if (!rule.test(array[nextIndex])) {
@@ -106,8 +108,4 @@ public class Algorithms {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'sortWithComparator'");
     }
-
-
-  
- 
 }

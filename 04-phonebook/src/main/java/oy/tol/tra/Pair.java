@@ -1,7 +1,5 @@
 package oy.tol.tra;
 
-import oy.tol.tra.Dictionary.Type;
-
 /**
  * Class Pair defines a key-value -pair of objects where each key has an
  * associated value.
@@ -60,10 +58,5 @@ public class Pair<K extends Comparable<K>, V> implements Comparable<Pair<K, V>> 
       }
       return true;
    }
-
-public Enum<Type> K() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'K'");
-}
 
 }
